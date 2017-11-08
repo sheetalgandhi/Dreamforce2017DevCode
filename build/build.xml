@@ -1,0 +1,68 @@
+<project name="Build Dreamforce2017" default="runPMDscan" basedir="." xmlns:sf="antlib:com.salesforce">
+
+  
+  <property name="src.dir" location="../src"/>
+  <!-- branch: patch, main, etc -->
+  <basename file="${src.dir}/.." property="project.branch"/>
+
+  <!-- Declare properties -->
+  <property name="build.properties.path" location="./build.properties"/>
+  <property name="credentials.properties.path" location="./credentials.properties"/>
+  <property name="lib.dir" location="./lib"/>
+
+  
+<!-- Include files -->
+  <property file="${credentials.properties.path}"/>
+  <property file="${build.properties.path}"/>
+
+<!-- Load libs -->
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${lib.dir}/ant-contrib-1.0b3.jar"/>
+  <taskdef uri='antlib:com.salesforce' resource='com/salesforce/antlib.xml' classpath='${lib.dir}/ant-salesforce-40.0.jar' />
+
+ 
+ <!-- deploy all code -->
+  <target name="deploy" depends="" description="deploy complete app ..." >
+      <echo message="Login user : ${sf.username}" />
+      <echo message="Login server : ${sf.serverurl}" />
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployroot="${src.dir}" runAllTests="${runTests}" maxPoll="${sf.maxPoll}" checkOnly="false" ignoreWarnings="true" rollbackOnError="true" pollWaitMillis="${sf.pollWaitMillis}" />
+  </target>
+
+  <!-- deployCheckOnly -->
+  <target name="deployCheckOnly" depends="" description="psuedo deploy of code">
+      <echo message="Login user : ${sf.username}" />
+      <echo message="Login server : ${sf.serverurl}" />
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployroot="${src.dir}" runAllTests="${runTests}" maxPoll="${sf.maxPoll}" checkOnly="true" ignoreWarnings="true" rollbackOnError="true" pollWaitMillis="${sf.pollWaitMillis}" />
+  </target>
+
+  <!-- Shows check only; never actually saves to the server -->
+    <target name="deployCodeCheckOnlyAndRunTests" depends="" description="DeployCheckOnlyCode run specified Test classes">
+      <echo message="Login user : ${sf.username}" />
+      <echo message="Login server : ${sf.serverurl}" />
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" deployroot="${src.dir}" testLevel="RunSpecifiedTests" checkOnly="true">
+          <runTest>DfDemoApexControllerTest</runTest>        
+      </sf:deploy>
+    </target>
+
+<!-- Run Tools -->
+
+  <!-- Define ant target for  PMD -->
+  <target name="runpmd" description="runs PMD scan on local files">
+    <!-- Modify perms to make shell script execuetable -->
+    <chmod file="../tools/pmd/build/startscan.sh" perm="a+x"/>
+    <!-- run shell script -->
+    <exec executable="../tools/pmd/build/startscan.sh" failonerror="true" />
+  </target>
+
+
+  <!-- Define ant target for  lightning linter -->
+  <target name="runlinter" description="runs lightning linter scan on local files">
+    <!-- Modify perms to make shell script execuetable -->
+    <chmod file="../tools/lightninglinter/build/aurascan.sh" perm="a+x"/>
+    <!-- run shell script -->
+    <exec executable="../tools/lightninglinter/build/aurascan.sh" failonerror="true"/>
+  </target>
+
+<!-- Run build pipeline by chaining -->
+  <target name="validatebuild" depends="runpmd, runlinter, deployCodeCheckOnlyAndRunTests" description="runs lightning linter scan on local files"/>       
+ 
+</project>

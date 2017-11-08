@@ -1,0 +1,21 @@
+{
+  "name": "lightningcodeanalyzer",
+  "version": "1.0.0",
+  "description": "Static Code Analyzer for Aura Javascript Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cmandhare",
+  "license": "ISC",
+  "dependencies": {
+    "json2xml": "*",
+    "node-dir": "^0.1.17",
+    "pdfmake": "^0.1.32",
+    "promise": "^8.0.1",
+    "request": "^2.81.0",
+    "walk": "^2.3.9",
+    "body-parser": "*",
+    "salesforce-lightning-cli": "*"
+  }
+}

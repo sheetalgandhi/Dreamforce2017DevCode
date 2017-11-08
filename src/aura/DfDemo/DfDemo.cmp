@@ -1,0 +1,47 @@
+<aura:component controller="DfDemoApexController" implements="flexipage:availableForAllPageTypes,force:appHostable">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="caseList" type="Case[]"/>
+    <div aura:id="fieldContainer">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+            <tr class="slds-text-title--caps">
+                 <th scope="col">
+                    <div class="slds-truncate" title="CaseNumber">CaseNumber</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Account">Account</div>
+                </th>
+               <th scope="col">
+                    <div class="slds-truncate" title="CaseReason">Reason</div>
+                </th> 
+               <th scope="col">
+                    <div class="slds-truncate" title="Subject">Subject</div>
+                </th>                
+               </tr>
+        </thead>       
+        <tbody>
+            <aura:iteration items="{!v.caseList}" var="testCase" indexVar="indx" >  
+                <tr>
+                    <th scope="row">
+                        <div class="slds-truncate" title="{!testCase.CaseNumber}"><a data-index="{!indx}" href="javascript:void(0);"  onclick="{! c.opensobjectTab}">{!testCase.CaseNumber} </a></div>
+                    </th> 
+                  	<th scope="row">
+                        <div class="slds-truncate" title="{!testCase.Account.Name}"><a data-index="{!indx}" href="javascript:void(0);"  onclick="{! c.opensubTabAPI}">{!testCase.Account.Name} </a></div>
+                    </th> 
+                    <th scope="row">
+                        <div class="slds-truncate" title="{!testCase.Reason}" >{!testCase.Reason}</div>
+                    </th>                                       
+                    <th scope="row">
+                        <div class="slds-truncate" title="{!testCase.Subject }">{!testCase.Subject}</div>
+                    </th> 
+                                                         
+                </tr>              
+            </aura:iteration>
+            
+        </tbody>
+        
+      </table> 
+   
+    </div>
+</aura:component>

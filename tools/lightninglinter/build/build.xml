@@ -1,0 +1,24 @@
+<project name="Aura Scan" default="runAuraScan" basedir=".">
+
+  <!-- Declare properties -->
+  <property name="properties.dir" location="./properties"/>
+  <property name="build.properties.path" location="${properties.dir}/build.properties"/>
+
+   <!-- Include files -->
+  <property file="${build.properties.path}"/>
+  <echo message="properties path : ${build.properties.path}" />
+  <echo message="srcpathargument : ${srcpathargument}" />
+
+
+  <!-- Define ant target for PMD -->
+  <target name="runAuraScan" description="runs PMD scan on local files">
+    <!-- Modify perms to make shell script execuetable -->
+    <chmod file="./aurascan.sh" perm="a+x"/>
+    <!-- run shell script -->
+    <exec executable="./aurascan.sh" failonerror="true" >
+       <!-- pass path argument to shell script. -->
+    <arg value="${srcpathargument}"/>
+  </exec>
+  </target>
+
+</project>
